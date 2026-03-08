@@ -33,12 +33,12 @@ export class PimPage {
 
     async redirectToPIMPage() {
         await this.pimMenu.click()
-        await this.page.waitForURL('**/pim/viewEmployeeList', { timeout: 10000 }),
-        await this.employeeRecord.first().waitFor({ state: 'visible', timeout: 10000 });
+        await this.page.waitForURL('**/pim/viewEmployeeList'),
+        await this.employeeRecord.first().waitFor({ state: 'visible' });
     }
     
     async verifyEmployeeListIsVisible() {
-        await expect(this.employeeListTable).toBeVisible({ timeout: 10000 });
+        await expect(this.employeeListTable).toBeVisible();
         const count = await this.employeeRecord.count();
         expect(count).toBeGreaterThan(0);
     }
@@ -93,7 +93,7 @@ export class PimPage {
         await this.employeeId.last().fill(id);
 
         await this.submitButton.click();
-        await expect(this.successToast).toBeVisible({ timeout: 5000 });
+        await expect(this.successToast).toBeVisible();
         await this.page.waitForURL('**/pim/viewPersonalDetails/empNumber/**');
     }
 

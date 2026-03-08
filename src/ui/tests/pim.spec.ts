@@ -2,24 +2,22 @@ import { test, expect } from "../fixtures/base";
 import { apiFactory } from '../../utils/apiFactory';
 
 test.describe('@B2 @UI Test Automation - Employee Directory PIM', () => {
-    test.beforeEach(async ({ page, baseURL }) => {
-        await page.goto(baseURL || '');
-    });
-
-    test('Navigate to PIM Module', async ({ page, loginPage, pimPage }) => {
+    test.beforeEach(async ({ page, baseURL, loginPage }) => {
+        await page.goto(baseURL || '', {
+            waitUntil: 'domcontentloaded',
+            timeout: 60000
+        });        
         await loginPage.fillLoginCredencials();
         await loginPage.redirectToHomePage();
+    });
 
+    test('Navigate to PIM Module', async ({ page, pimPage }) => {
         await pimPage.redirectToPIMPage();
         await pimPage.verifyEmployeeListIsVisible();
         await expect(page.locator('.oxd-topbar-header-title')).toBeVisible();
     });
 
-    test('Navigate to PIM Module and search for an employee', async ({ page, loginPage, pimPage }) => {
-        await page.setViewportSize({ width: 1920, height: 1080 });
-        await loginPage.fillLoginCredencials();
-        await loginPage.redirectToHomePage();
-
+    test('Navigate to PIM Module and search for an employee', async ({ pimPage }) => {
         await pimPage.redirectToPIMPage();
         await pimPage.verifyEmployeeListIsVisible();
 
@@ -30,10 +28,8 @@ test.describe('@B2 @UI Test Automation - Employee Directory PIM', () => {
         await expect(pimPage.employeeRecord).toHaveCount(1);
     });
 
-    test('Navigate to PIM Module and create an employee', async ({ loginPage, pimPage }) => {
+    test('Navigate to PIM Module and create an employee', async ({ pimPage }) => {
         const employeeData = apiFactory.getRandomName();
-        await loginPage.fillLoginCredencials();
-        await loginPage.redirectToHomePage();
 
         await test.step('Create an employee and validate the profile info', async ({}) => {
             await pimPage.redirectToPIMPage();

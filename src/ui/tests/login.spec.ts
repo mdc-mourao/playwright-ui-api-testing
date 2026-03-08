@@ -3,7 +3,10 @@ import { test, expect } from "../fixtures/base";
 
 test.describe('@B1 @UI Test Automation - Login Tests', () => {
     test.beforeEach(async ({ page, baseURL }) => {
-        await page.goto(baseURL || '');
+        await page.goto(baseURL || '', {
+            waitUntil: 'domcontentloaded',
+            timeout: 60000
+        });    
     });
 
     test('Successful Login', async ({ page, loginPage }) => {
@@ -19,15 +22,15 @@ test.describe('@B1 @UI Test Automation - Login Tests', () => {
         await loginPage.fillLoginCredencials(process.env.USER_NAME, 'invalidPassword');
         await loginPage.loginButton.click();
         await expect(page).toHaveURL(/.*login.*/);
-        await expect(page.getByRole('alert')).toBeVisible({ timeout: 10000 });
-        // await expect(page.getByRole('alert')).toContainText('Invalid credentials');
+        await expect(page.getByRole('alert')).toBeVisible();
+        await expect(page.getByRole('alert')).toContainText('Invalid credentials');
     });
 
     test('Failed Login - empty fields', async ({ loginPage }) => {
         await loginPage.fillLoginCredencials('', '');
         await loginPage.loginButton.click();
-        await loginPage.validateErrorMessage('username');
-        await loginPage.validateErrorMessage('password');
+        await loginPage.validateErrorMessage('username', 'Required');
+        await loginPage.validateErrorMessage('password', 'Required');
     });
 
     test('Logout', async ({ loginPage }) => {

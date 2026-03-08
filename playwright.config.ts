@@ -20,12 +20,12 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 2 : 4,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['html'],
+    ['html', { open: 'never' }],
     ['allure-playwright', { outputFolder: 'allure-report' }]
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -37,7 +37,14 @@ export default defineConfig({
     /* Record video only on failure. */
     video: 'on-first-retry',
     /* Capture screenshot on failure. */
-    screenshot: 'only-on-failure'
+    screenshot: 'only-on-failure',
+    /* Set default timeouts for actions and navigation */
+    actionTimeout: 15000, 
+    navigationTimeout: 60000,
+  },
+  expect: {
+    /* Default timeout for all `expect()` assertions. */
+    timeout: 15000,
   },
 
   /* Configure projects for major browsers */
