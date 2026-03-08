@@ -1,0 +1,13 @@
+services:
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.45.0-jammy 
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:          
+      - CI=true
+    env_file:
+      - .env
+    command: >
+      sh -c "npm ci && npx playwright test --project=API-Tests --grep='@API'"
