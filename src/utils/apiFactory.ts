@@ -25,5 +25,13 @@ export const apiFactory = {
         };
     },
 
-
+    getRandomName() {
+        const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase();
+        
+        return {
+            firstName: `FN_${randomStr}`,
+            lastName: `LN_${randomStr}`,
+            id: `ID${Date.now().toString().slice(-4)}`
+        };
+    }
 };
