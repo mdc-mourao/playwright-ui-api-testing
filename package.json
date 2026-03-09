@@ -7,7 +7,21 @@
     "test:all": "playwright test",
     "test:api": "./node_modules/.bin/playwright test --project=API-Tests",
     "test:ui": "./node_modules/.bin/playwright test --grep='@UI'",
-    "test:chromium": "./node_modules/.bin/playwright test --project='UI-Chromium'"
+    "test:chromium": "./node_modules/.bin/playwright test --project='UI-Chromium'",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix && prettier --write .",
+    "lint:report": "eslint . --format html --output-file lint-report.html",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "validate": "npm run typecheck && npm run lint",
+    "lint-staged": "lint-staged",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "repository": {
     "type": "git",
@@ -22,10 +36,19 @@
   },
   "homepage": "https://github.com/mdc-mourao/playwright-ui-api-testing#readme",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.3.5",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
     "allure-playwright": "^3.6.0",
-    "dotenv": "^17.3.1"
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.3.1",
+    "eslint": "^10.0.3",
+    "globals": "^17.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.2",
+    "prettier": "^3.8.1"
   },
   "dependencies": {
     "ajv": "^8.18.0",

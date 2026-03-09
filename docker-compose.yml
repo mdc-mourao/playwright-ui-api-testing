@@ -5,7 +5,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    environment:          
+    environment:
       - CI=true
     env_file:
       - .env

@@ -1,4 +1,4 @@
-import { JSONSchemaType } from "ajv";
+import { JSONSchemaType } from 'ajv';
 
 interface ApiResponse {
   data: {
@@ -28,62 +28,62 @@ interface ApiResponse {
 }
 
 export const userSchema: JSONSchemaType<ApiResponse> = {
-  type: "object",
+  type: 'object',
   properties: {
     data: {
-      type: "object",
+      type: 'object',
       properties: {
-        id: { type: "integer" },
-        email: { type: "string", format: "email" },
-        first_name: { type: "string" },
-        last_name: { type: "string" },
-        avatar: { type: "string", format: "uri" }
+        id: { type: 'integer' },
+        email: { type: 'string', format: 'email' },
+        first_name: { type: 'string' },
+        last_name: { type: 'string' },
+        avatar: { type: 'string', format: 'uri' },
       },
-      required: ["id", "email", "first_name", "last_name", "avatar"],
-      additionalProperties: false
+      required: ['id', 'email', 'first_name', 'last_name', 'avatar'],
+      additionalProperties: false,
     },
     support: {
-      type: "object",
+      type: 'object',
       properties: {
-        url: { type: "string", format: "uri" },
-        text: { type: "string" }
+        url: { type: 'string', format: 'uri' },
+        text: { type: 'string' },
       },
-      required: ["url", "text"],
-      additionalProperties: false
+      required: ['url', 'text'],
+      additionalProperties: false,
     },
     _meta: {
-      type: "object",
+      type: 'object',
       properties: {
-        powered_by: { type: "string" },
-        docs_url: { type: "string", format: "uri" },
-        upgrade_url: { type: "string", format: "uri" },
-        example_url: { type: "string", format: "uri" },
-        variant: { type: "string" },
-        message: { type: "string" },
+        powered_by: { type: 'string' },
+        docs_url: { type: 'string', format: 'uri' },
+        upgrade_url: { type: 'string', format: 'uri' },
+        example_url: { type: 'string', format: 'uri' },
+        variant: { type: 'string' },
+        message: { type: 'string' },
         cta: {
-          type: "object",
+          type: 'object',
           properties: {
-            label: { type: "string" },
-            url: { type: "string", format: "uri" }
+            label: { type: 'string' },
+            url: { type: 'string', format: 'uri' },
           },
-          required: ["label", "url"],
-          additionalProperties: false
+          required: ['label', 'url'],
+          additionalProperties: false,
         },
-        context: { type: "string" }
+        context: { type: 'string' },
       },
       required: [
-        "powered_by",
-        "docs_url",
-        "upgrade_url",
-        "example_url",
-        "variant",
-        "message",
-        "cta",
-        "context"
+        'powered_by',
+        'docs_url',
+        'upgrade_url',
+        'example_url',
+        'variant',
+        'message',
+        'cta',
+        'context',
       ],
-      additionalProperties: false
-    }
+      additionalProperties: false,
+    },
   },
-  required: ["data", "support", "_meta"],
-  additionalProperties: false
+  required: ['data', 'support', '_meta'],
+  additionalProperties: false,
 };
