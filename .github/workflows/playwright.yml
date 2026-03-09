@@ -3,7 +3,7 @@ name: Playwright Tests
 on:
   push:
     branches: [main, master]
-    
+
   pull_request:
     branches: [main, master]
 
@@ -30,7 +30,7 @@ jobs:
       API_URL: ${{ vars.API_URL }}
       API_KEY: ${{ secrets.API_KEY }}
       BASE_URL: ${{ vars.BASE_URL }}
-      USERNAME: ${{ secrets.USER_NAME }}
+      USER_NAME: ${{ secrets.USER_NAME }}
       PASSWORD: ${{ secrets.PASSWORD }}
 
     steps:
