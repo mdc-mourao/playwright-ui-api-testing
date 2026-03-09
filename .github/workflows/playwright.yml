@@ -4,9 +4,37 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'UI Environment'
+        required: true
+        default: 'opensource-demo'
+        type: choice
+        options:
+          - opensource-demo
+          - staging
+      test_type:
+        description: 'What to execute?'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - ui-all
+          - ui-chromium
+          - ui-firefox
+          - ui-webkit
+          - api
+      run_visual_tests:
+        description: 'Update Screenshots?'
+        required: false
+        default: false
+        type: boolean
+
 jobs:
   api-testing:
-    timeout-minutes: 40
+    timeout-minutes: 100
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,13 +49,43 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright Tests
-        run: npx playwright test --project='API-Tests' --project='UI-Chromium' || true
+        run: |
+          ARGS=""
+          case "${{ github.event.inputs.test_type }}" in
+            "all")
+              ARGS=""
+              ;;
+            "api")
+              ARGS="--project='API-Tests'"
+              ;;
+            "ui-all")
+              ARGS="--project='UI-Chromium' --project='UI-Firefox' --project='UI-Webkit'"
+              ;;
+            "ui-chromium")
+              ARGS="--project='UI-Chromium'"
+              ;;
+            "ui-firefox")
+              ARGS="--project='UI-Firefox'"
+              ;;
+            "ui-webkit")
+              ARGS="--project='UI-Webkit'"
+              ;;
+          esac
+
+          UPDATE_FLAG=""
+          if [ "${{ github.event.inputs.run_visual_tests }}" == "true" ]; then
+            UPDATE_FLAG="--update-snapshots"
+          fi
+
+          npx playwright test $ARGS $UPDATE_FLAG || true
+
         env:
           API_URL: ${{ vars.API_URL }}
           API_KEY: ${{ secrets.API_KEY }}
           BASE_URL: ${{ vars.BASE_URL }}
           USERNAME: ${{ secrets.USER_NAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
+
       - name: Generate Allure Report
         run: npm run report:generate
 

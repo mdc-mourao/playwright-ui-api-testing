@@ -1,9 +1,9 @@
 # 🚀 API and UI Automation Suite
 
-This project is a high-level automation framework focused on UI and API testing.
+This project is a high-level automation framework focused on UI (OrangeHRM) and API (ReqRes.in) testing.
 It was designed to demonstrate modern QA Engineering practices, such as the Page Object Model (POM), environment isolation, and CI/CD integration.
 
-API testing framework designed for the [ReqRes.in](https://reqres.in/). This project implements contract testing, dynamic business logic validation, and cross-browser execution.
+This project implements contract testing, dynamic business logic validation, and cross-browser execution.
 
 ## Prerequisites:
 
@@ -11,34 +11,34 @@ API testing framework designed for the [ReqRes.in](https://reqres.in/). This pro
 - Git
 - Docker
 
-## How to install:
+## Tech Stack
+
+- Playwright
+- TypeScript
+- AJV (JSON Schema Validation)
+- Dotenv (Environment Configuration)
+- Allure Reporter
+- Docker
+- GitHub Actions
+- ESLint + Prettier + Husky
+
+## 📦 How to install:
 
 ### 1st clone the repository
 
-    - git clone https://github.com/mdc-mourao/playwright-ui-api-testing.git
-    - cd playwright-ui-api-testings
+    git clone https://github.com/mdc-mourao/playwright-ui-api-testing.git
+    cd playwright-ui-api-testing
 
 ### 2nd install dependencies:
 
-    - npm install
+**Note: This will automatically install Playwright, AJV, Dotenv, and Allure as defined in the package.json**
 
-### 3rd install Playwright browsers
-
-    - npm init playwright@latest
-
-### 4th install dotenv library
-
-    - npm install dotenv --save-dev
-
-### 5th install AJV library
-
-    - npm install ajv
-    - npm install ajv ajv-formats
-    - npm install better-ajv-errors
+    npm install
+    npx playwright install --with-deps
 
 ### Optional
 
-    - Install Visual Studio Code and install the extension "Playwright"
+    Install Visual Studio Code and install the extension "Playwright"
 
 ## Environment Configurations
 
@@ -48,7 +48,7 @@ API testing framework designed for the [ReqRes.in](https://reqres.in/). This pro
 
 ## Design Decisions
 
-### Project Structure
+### 📂 Project Structure
 
 ```text
 src/
@@ -63,28 +63,54 @@ src/
 └── utils/        # Factories
 ```
 
+### 🛠️ Key Design Patterns Applied
+
+1. **Hybrid Testing Approach (API + UI)**: API tests provide fast feedback on core business logic and UI tests ensure end-to-end user journey integrity.
+2. **POM & Fixtures**: Implementation of POM for Login, Dashboard, and PIM pages with fixtures.
+3. **Resilience to Environment Instability**: No hardcoded sleeps, just explict waits.
+4. **Containerization with Docker**: to help with different environment, such us locally and CI (GitHub Actions)
+5. **Visual Regression Strategy**: Full-page screenshots would cause false negatives because of the dynamic changes. Selective screenshotting provides visual security.
+
 ## How to run the tests
 
-The test suite for UI is configured to support Chromium, Firefox and WebKit and it's configurated to run with 4 workers in parallel.
+The UI test suite supports Chromium, Firefox and WebKit and runs with 4 workers in parallel.
 In total there are 20 UI tests (60 with cross-browsing) and 14 API tests.
+
 To run all tests (UI and API):
 
-- npx playwright test
+```
+ npx playwright test
+```
 
 To run only API/UI tests:
 
-- Available projects: Available projects: "UI-Chromium", "UI-Firefox", "UI-WebKit", "API-Tests"
-- npx playwright test --project='API-Tests'
-- npx playwright test --project='UI-Chromium' (runs UI tests only through Chromium)
-- npx playwright test --grep='UI' (runs UI tests in every configurated browser)
+- Available projects: "UI-Chromium", "UI-Firefox", "UI-WebKit", "API-Tests"`
 
-Or by section (A or B) where `_` is the number of the section [1, 2, 3], eg
+```
+npx playwright test --project='API-Tests'
+npx playwright test --project='UI-Chromium' (runs UI tests only through Chromium)
+npx playwright test --grep='UI' (runs UI tests in every configurated browser)
+```
 
-- npx playwright test --grep='A3'
+Or by section (A or B) where `_` is the number of the section [1, 2, 3], e.g:
+
+```
+npx playwright test --grep='A3'
+```
 
 ## How to generate test report
 
-- npx playwright show-report (Playwright HTML Default)
+Playwright **HTML Default**:
+
+```
+npx playwright show-report
+```
+
+Generate and open the **Allure** report
+
+```
+npx allure open allure-report
+```
 
 ## Technical Highlights
 
@@ -104,55 +130,53 @@ Instead of hardcoded values, our `validateUserData` builder implements:
 
 ### 3. CI/CD Pipeline
 
-Integrated with **GitHub Actions**, automatically running API tests and UI tests in Chromium on every `push` for faster CI execution. It securely handles environment variables using **GitHub Secrets**.
+Integrated with **GitHub Actions**, automatically running API tests and UI tests in Chromium on every `push` and `pull_request` for faster CI execution, with 2 workers. It securely handles environment variables using **GitHub Secrets**.
 
-### 4. Report Allure
+And also with manual control **Workflow Dispatch**. Features a parameterized manual trigger that allows to choose a specific Test Scopes (API only, UI only, or specific browsers like Firefox/Webkit).
 
-- We need to install the dependency `npm install --save-dev allure-playwright`
-- Add the report in the `playwright.config.ts`
-- And after a execution run `npx allure serve allure-results`, it will automatically open the report
-- If you want to generate a report you can do so by running:
+### 🐳 4. Docker Image
 
-  `npx allure generate allure-results -o allure-report --clean`
+Docker is configured to run only API tests and UI using Chromium only (`docker-compose up`) but can be changed with the following commands in the terminal:
 
-  `npx allure open allure-report`
+1.  Run all tests and Generate a report (API and UI cross-browsing):
 
-### 5. Docker Image 🐳
+```
+docker compose run --rm playwright sh -c "npm ci && npm run test:all"
+```
 
-Docker is configurated to run only API tests and UI using Chromium only (`docker-compose up`)but can be changed with the following commands in the terminal:
+2.  Run a specific set of tests (e.g. test:api, test:ui and test:chromium - package.json > scripts):
 
-1.  Run all testes and Generate a report (API and UI cross-browsing):
+```
+docker compose run --rm playwright sh -c "npm ci && npm run test:chromium"
+```
 
-- docker compose run --rm playwright sh -c "npm ci && npm run test:all"
-- npx allure serve allure-results
+Once the tests finish, the results are synced to the **allure-results** folder on your machine, just run the command to generate it.
 
-2.  Run a specific set of tests (test:api, test:ui and test:chromium - package.json > scripts):
-
-- docker compose run --rm playwright sh -c "npm ci && npm run test:chromium"
-
-Once the tests finish, the results are synced to the allure-results folder on your machine, just run the command to generate it.
-
-### 6. Linting and Formatting
+### 5. Linting and Formatting
 
 This project uses **ESLint** for code quality analysis and **Prettier** for automatic code formatting. These tools ensure code consistency, identify bad practices, and maintain a uniform code style across the project.
 
 #### How It Works:
-- **ESLint**: Analyzes your code to identify syntax errors, best practice violations, and style inconsistencies (e.g., unused variables, missing return types).
+
+- **ESLint**: Analyses your code to identify syntax errors, best practice violations, and style inconsistencies (e.g., unused variables, missing return types).
 - **Prettier**: Automatically formats code to maintain consistent styling (spaces, quotes, line breaks, indentation).
 - **Husky + lint-staged**: Automatically runs linting/formatting on staged files before each commit, preventing poorly formatted code from being committed.
 
 #### Available Commands:
+
 - `npm run lint` — Scans the entire codebase for code quality issues and displays them without modifying files.
 - `npm run lint:fix` — Automatically fixes ESLint issues and formats all files with Prettier (spaces, quotes, indentation, etc.).
 - `npm run lint:report` — Generates an HTML report of linting issues saved as `lint-report.html`.
 - `npm run format` — Formats code with Prettier only (without ESLint analysis).
 
 #### Configuration:
+
 - **ESLint config**: `eslint.config.mjs` — Defines rules for TypeScript, JavaScript, and code quality standards.
 - **Prettier config**: `.prettierrc` — Specifies formatting preferences (semicolons, quotes, print width, etc.).
 - **Pre-commit hook**: `.husky/pre-commit` — Automatically runs `lint-staged` before commits.
 
 #### Workflow:
+
 1. Stage your changes: `git add src/...`
 2. Commit: `git commit -m "message"` — Husky automatically runs linting on staged files.
 3. If formatting issues are found, fix them with `npm run lint:fix` and commit again.
@@ -166,6 +190,8 @@ Due to the nature of the public demonstration instance used for UI testing, the 
 
 #### Server Instability
 
+Due to the unstable nature of the OrangeHRM demo environment, where global users frequently change the system language, this framework avoids assertions based on UI text strings (like menu names or titles). Instead, it prioritizes robust selectors (like ARIA roles, test IDs, or data attributes) and validates element visibility and URL states. This strategy prevents 'flaky tests' and false negatives caused by localization changes, ensuring the suite remains green regardless of the environment's current language setting.
+
 Occasionally, the site may become unavailable (HTTP 503/404) or extremely slow due to automated server resets or high concurrent traffic.
 To improve stability in the OrangeHRM demo environment, navigation uses: `waitUntil: "domcontentloaded"` and a 1 minute timeout (which did the trick :D).
 
@@ -174,16 +200,18 @@ Running all browsers in parallel may therefore lead to intermittent timeouts tha
 
 For more stable execution during evaluation, it is recommended to run the tests using Chromium only:
 
-- npx playwright test --project="UI-Chromium"
+```
+npx playwright test --project="UI-Chromium"
+```
 
 ## Assumptions made
-d to run the tests using Chromium only:
- - npx playwright test --project="UI-Chromium"
 
-## Assumptions made
+1. **Environment Volatility & Performance**
 
+The OrangeHRM demo environment is a shared public sandbox that suffers frequent resets and manual data changes by other users. Assume that any data created (Employees, Users) might be deleted or modified.
 
+The server response time is highly unstable, with observed latencies exceeding 15-20 seconds for initial page loads and API responses.
 
+2. **Docker**
 
-
-
+The evaluator has Docker and Docker-compose installed for "out-of-the-box" execution.

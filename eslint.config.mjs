@@ -30,6 +30,13 @@ export default [
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**'],
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      '**/playwright-report/**',
+      '**/allure-results/**',
+      '**/allure-report/**',
+      '**/test-results/**',
+    ],
   },
 ];

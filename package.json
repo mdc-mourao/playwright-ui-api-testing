@@ -8,6 +8,8 @@
     "test:api": "./node_modules/.bin/playwright test --project=API-Tests",
     "test:ui": "./node_modules/.bin/playwright test --grep='@UI'",
     "test:chromium": "./node_modules/.bin/playwright test --project='UI-Chromium'",
+    "test:webkit": "./node_modules/.bin/playwright test --project='UI-WebKit'",
+    "test:firefox": "./node_modules/.bin/playwright test --project='UI-Firefox'",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix && prettier --write .",
     "lint:report": "eslint . --format html --output-file lint-report.html",
