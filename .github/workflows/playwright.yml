@@ -1,19 +1,14 @@
 name: Playwright Tests
+
 on:
   push:
     branches: [main, master]
+    
   pull_request:
     branches: [main, master]
+
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'UI Environment'
-        required: true
-        default: 'opensource-demo'
-        type: choice
-        options:
-          - opensource-demo
-          - staging
       test_type:
         description: 'What to execute?'
         required: true
@@ -26,18 +21,21 @@ on:
           - ui-firefox
           - ui-webkit
           - api
-      run_visual_tests:
-        description: 'Update Screenshots?'
-        required: false
-        default: false
-        type: boolean
 
 jobs:
-  api-testing:
+  testing:
     timeout-minutes: 100
     runs-on: ubuntu-latest
+    env:
+      API_URL: ${{ vars.API_URL }}
+      API_KEY: ${{ secrets.API_KEY }}
+      BASE_URL: ${{ vars.BASE_URL }}
+      USERNAME: ${{ secrets.USER_NAME }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
@@ -48,43 +46,33 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright Tests
-        run: |
-          ARGS=""
-          case "${{ github.event.inputs.test_type }}" in
-            "all")
-              ARGS=""
-              ;;
-            "api")
-              ARGS="--project='API-Tests'"
-              ;;
-            "ui-all")
-              ARGS="--project='UI-Chromium' --project='UI-Firefox' --project='UI-Webkit'"
-              ;;
-            "ui-chromium")
-              ARGS="--project='UI-Chromium'"
-              ;;
-            "ui-firefox")
-              ARGS="--project='UI-Firefox'"
-              ;;
-            "ui-webkit")
-              ARGS="--project='UI-Webkit'"
-              ;;
-          esac
+      - name: Run API + Chromium (default)
+        if: github.event_name != 'workflow_dispatch'
+        run: npx playwright test --project="API-Tests" --project="UI-Chromium"
+      
+      - name: Run all tests
+        if: github.event.inputs.test_type == 'all'
+        run: npx playwright test
 
-          UPDATE_FLAG=""
-          if [ "${{ github.event.inputs.run_visual_tests }}" == "true" ]; then
-            UPDATE_FLAG="--update-snapshots"
-          fi
+      - name: Run API tests
+        if: github.event.inputs.test_type == 'api'
+        run: npx playwright test --project="API-Tests"
 
-          npx playwright test $ARGS $UPDATE_FLAG || true
+      - name: Run UI Chromium
+        if: github.event.inputs.test_type == 'ui-chromium'
+        run: npx playwright test --project="UI-Chromium"
 
-        env:
-          API_URL: ${{ vars.API_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
-          BASE_URL: ${{ vars.BASE_URL }}
-          USERNAME: ${{ secrets.USER_NAME }}
-          PASSWORD: ${{ secrets.PASSWORD }}
+      - name: Run UI Firefox
+        if: github.event.inputs.test_type == 'ui-firefox'
+        run: npx playwright test --project="UI-Firefox"
+
+      - name: Run UI WebKit
+        if: github.event.inputs.test_type == 'ui-webkit'
+        run: npx playwright test --project="UI-Webkit"
+
+      - name: Run all UI browsers
+        if: github.event.inputs.test_type == 'ui-all'
+        run: npx playwright test --project="UI-Chromium" --project="UI-Firefox" --project="UI-Webkit"
 
       - name: Generate Allure Report
         run: npm run report:generate
@@ -105,7 +93,7 @@ jobs:
 
       - name: Upload Playwright Trace/Videos (On Failure)
         uses: actions/upload-artifact@v4
-        if: failure() # Só sobe se algo falhar, para poupar espaço
+        if: always()
         with:
           name: playwright-traces
           path: test-results/
