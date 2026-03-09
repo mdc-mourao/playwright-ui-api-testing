@@ -21,7 +21,7 @@ jobs:
       run: npx playwright install --with-deps
     
     - name: Run Playwright Tests
-      run: npm run test:all || true
+      run: npx playwright test --project='API-Tests' --project='UI-Chromium' || true
       env:
         API_URL: ${{ vars.API_URL }}
         API_KEY: ${{ secrets.API_KEY }}
