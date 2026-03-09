@@ -9,11 +9,13 @@ test.describe('@B1 @UI Test Automation - Login Tests', () => {
   });
 
   test('Successful Login', async ({ page, loginPage }) => {
-    // Enter Valid Credentials
     await loginPage.fillLoginCredencials();
+    const loginLogo = page.locator('.orangehrm-login-branding');
+    await expect(loginLogo).toHaveScreenshot('login-page.png', {
+      maxDiffPixels: 100
+    });
     // Verify redirection to Dashboard and it loads successfully
     await loginPage.redirectToHomePage();
-    await expect(page.locator('.oxd-topbar-header-title')).toBeVisible();
   });
 
   test('Failed Login - invalid password', async ({ page, loginPage }) => {

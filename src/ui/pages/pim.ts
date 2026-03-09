@@ -3,6 +3,7 @@ import { expect, Locator, Page } from '@playwright/test';
 export class PimPage {
   readonly page: Page;
   readonly pimMenu: Locator;
+  readonly title: Locator;
   readonly employeeListTable: Locator;
   readonly employeeRecord: Locator;
   readonly nameCells: Locator;
@@ -18,6 +19,7 @@ export class PimPage {
   constructor(page: Page) {
     this.page = page;
     this.pimMenu = page.locator('a[href*="viewPimModule"]');
+    this.title = page.locator('.oxd-topbar-header-title');
     this.employeeListTable = this.page.locator('[role=table]');
     this.employeeRecord = this.page.locator('.oxd-table-card');
     this.nameCells = page.locator('.oxd-table-cell');
@@ -46,6 +48,7 @@ export class PimPage {
     await expect(this.employeeListTable).toBeVisible();
     const count = await this.employeeRecord.count();
     expect(count).toBeGreaterThan(0);
+    await expect(this.title).toBeVisible();
   }
 
   async searchEmployeeByName(name: string) {

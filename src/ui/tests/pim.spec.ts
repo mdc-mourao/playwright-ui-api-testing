@@ -11,10 +11,9 @@ test.describe('@B2 @UI Test Automation - Employee Directory PIM', () => {
     await loginPage.redirectToHomePage();
   });
 
-  test('Navigate to PIM Module', async ({ page, pimPage }) => {
+  test('Navigate to PIM Module', async ({ pimPage }) => {
     await pimPage.redirectToPIMPage();
     await pimPage.verifyEmployeeListIsVisible();
-    await expect(page.locator('.oxd-topbar-header-title')).toBeVisible();
   });
 
   test('Navigate to PIM Module and search for an employee', async ({

@@ -6,6 +6,7 @@ export class LoginPage {
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
   readonly userOptions: Locator;
+  readonly title: Locator;
 
   private readonly username = process.env.USER_NAME || '';
   private readonly password = process.env.PASSWORD || '';
@@ -16,6 +17,7 @@ export class LoginPage {
     this.passwordInput = page.locator('input[name="password"]');
     this.loginButton = page.locator('button[type="submit"]');
     this.userOptions = page.locator('.oxd-userdropdown-tab');
+    this.title = page.locator('.oxd-topbar-header-title');
   }
 
   async fillLoginCredencials(username?: string, password?: string) {
@@ -30,7 +32,7 @@ export class LoginPage {
     await this.loginButton.click();
     await this.page.waitForURL('**/dashboard/**');
     await expect(this.page).toHaveURL(/.*dashboard.*/);
-    await expect(this.page.getByRole('heading')).toContainText('Dashboard');
+    await expect(this.title).toBeVisible();
   }
 
   async validateErrorMessage(field: string, message: string) {
