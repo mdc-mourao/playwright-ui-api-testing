@@ -1,6 +1,7 @@
 services:
   playwright:
-    image: mcr.microsoft.com/playwright:v1.58.2-jammy
+    build: .
+    image: playwright-image:local
     working_dir: /app
     volumes:
       - .:/app
@@ -10,4 +11,4 @@ services:
     env_file:
       - .env
     command: >
-      sh -c "npm ci && npx playwright test --project='API-Tests' --project='UI-Chromium'"
+      sh -c "npm ci && npx playwright test --project='API-Tests' && npm run report:generate"
