@@ -61,7 +61,7 @@ export class PimPage {
         (resp) =>
           resp.url().includes('/api/v2/pim/employees') && resp.status() === 200
       ),
-      await this.submitButton.click(),
+      await this.submitButton.click()
     ]);
   }
 
@@ -72,7 +72,7 @@ export class PimPage {
         (resp) =>
           resp.url().includes('/api/v2/pim/employees') && resp.status() === 200
       ),
-      await this.submitButton.click(),
+      await this.submitButton.click()
     ]);
   }
 

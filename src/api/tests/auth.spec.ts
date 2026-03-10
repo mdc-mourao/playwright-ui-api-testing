@@ -4,7 +4,7 @@ import { AuthClient } from '../clients/authClient';
 import {
   errorSchema,
   registerSchema,
-  loginSchema,
+  loginSchema
 } from '../schemas/authSchemas';
 
 import { apiFactory } from '../../utils/apiFactory';

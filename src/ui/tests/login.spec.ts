@@ -4,7 +4,7 @@ test.describe('@B1 @UI Test Automation - Login Tests', () => {
   test.beforeEach(async ({ page, baseURL }) => {
     await page.goto(baseURL || '', {
       waitUntil: 'domcontentloaded',
-      timeout: 60000,
+      timeout: 60000
     });
   });
 

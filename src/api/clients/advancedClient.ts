@@ -5,7 +5,7 @@ import betterAjvErrors from 'better-ajv-errors';
 export function validateSchema(schema: object, data: unknown) {
   const ajv = new Ajv({
     allErrors: true,
-    strict: true,
+    strict: true
   });
   addFormats(ajv);
 

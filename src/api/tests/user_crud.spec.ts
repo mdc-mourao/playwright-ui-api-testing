@@ -5,7 +5,7 @@ import {
   userCreateSchema,
   userListSchema,
   userUpdateSchema,
-  validateUserData,
+  validateUserData
 } from '../schemas/userSchemas';
 
 import { apiFactory } from '../../utils/apiFactory';
@@ -71,7 +71,7 @@ test.describe('@A1 @API - CRUD Operations', () => {
   const userDatasets = [
     { name: 'John Doe', job: 'QA Engineer' },
     { name: 'Jane Smith', job: 'Fullstack Dev' },
-    { name: 'Carlos Silva', job: 'Product Owner' },
+    { name: 'Carlos Silva', job: 'Product Owner' }
   ];
   for (const user of userDatasets) {
     test(`Data-Driven POST: Create user ${user.name} with role: ${user.job}`, async ({}) => {
@@ -87,7 +87,7 @@ test.describe('@A1 @API - CRUD Operations', () => {
       expect(info).toMatchObject({
         ...userCreateSchema,
         name: user.name,
-        job: user.job,
+        job: user.job
       });
       const today = new Date().toISOString().split('T')[0];
       expect(info.createdAt).toContain(today);
@@ -118,7 +118,7 @@ test.describe('@A1 @API - CRUD Operations', () => {
       expect(updateInfo).toMatchObject({
         ...userUpdateSchema,
         name: name,
-        job: job,
+        job: job
       });
       expect(updateInfo.name).not.toBe(old_name);
       const today = new Date().toISOString().split('T')[0];

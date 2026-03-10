@@ -26,7 +26,7 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['html', { open: 'never' }],
-    ['allure-playwright', { outputFolder: 'allure-results' }],
+    ['allure-playwright', { outputFolder: 'allure-results' }]
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -40,11 +40,11 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     /* Set default timeouts for actions and navigation */
     actionTimeout: 15000,
-    navigationTimeout: 60000,
+    navigationTimeout: 60000
   },
   expect: {
     /* Default timeout for all `expect()` assertions. */
-    timeout: 15000,
+    timeout: 15000
   },
 
   /* Configure projects for major browsers */
@@ -54,24 +54,24 @@ export default defineConfig({
       testDir: './src/ui/tests',
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: process.env.BASE_URL,
-      },
+        baseURL: process.env.BASE_URL
+      }
     },
     {
       name: 'UI-Firefox',
       testDir: './src/ui/tests',
       use: {
         ...devices['Desktop Firefox'],
-        baseURL: process.env.BASE_URL,
-      },
+        baseURL: process.env.BASE_URL
+      }
     },
     {
       name: 'UI-WebKit',
       testDir: './src/ui/tests',
       use: {
         ...devices['Desktop Safari'],
-        baseURL: process.env.BASE_URL,
-      },
+        baseURL: process.env.BASE_URL
+      }
     },
     {
       name: 'API-Tests',
@@ -79,11 +79,11 @@ export default defineConfig({
       use: {
         baseURL: process.env.API_URL,
         extraHTTPHeaders: {
-          'x-api-key': process.env.API_KEY || '',
-        },
-      },
-    },
-  ],
+          'x-api-key': process.env.API_KEY || ''
+        }
+      }
+    }
+  ]
 
   /* Run your local dev server before starting the tests */
   // webServer: {

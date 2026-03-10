@@ -37,19 +37,19 @@ export const userSchema: JSONSchemaType<ApiResponse> = {
         email: { type: 'string', format: 'email' },
         first_name: { type: 'string' },
         last_name: { type: 'string' },
-        avatar: { type: 'string', format: 'uri' },
+        avatar: { type: 'string', format: 'uri' }
       },
       required: ['id', 'email', 'first_name', 'last_name', 'avatar'],
-      additionalProperties: false,
+      additionalProperties: false
     },
     support: {
       type: 'object',
       properties: {
         url: { type: 'string', format: 'uri' },
-        text: { type: 'string' },
+        text: { type: 'string' }
       },
       required: ['url', 'text'],
-      additionalProperties: false,
+      additionalProperties: false
     },
     _meta: {
       type: 'object',
@@ -64,12 +64,12 @@ export const userSchema: JSONSchemaType<ApiResponse> = {
           type: 'object',
           properties: {
             label: { type: 'string' },
-            url: { type: 'string', format: 'uri' },
+            url: { type: 'string', format: 'uri' }
           },
           required: ['label', 'url'],
-          additionalProperties: false,
+          additionalProperties: false
         },
-        context: { type: 'string' },
+        context: { type: 'string' }
       },
       required: [
         'powered_by',
@@ -79,11 +79,11 @@ export const userSchema: JSONSchemaType<ApiResponse> = {
         'variant',
         'message',
         'cta',
-        'context',
+        'context'
       ],
-      additionalProperties: false,
-    },
+      additionalProperties: false
+    }
   },
   required: ['data', 'support', '_meta'],
-  additionalProperties: false,
+  additionalProperties: false
 };

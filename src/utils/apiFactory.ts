@@ -12,7 +12,7 @@ export const apiFactory = {
       'Ana Pereira',
       'João Ferreira',
       'Sofia Rodrigues',
-      'Miguel Carvalho',
+      'Miguel Carvalho'
     ];
     const jobs = [
       'QA Engineer',
@@ -23,12 +23,12 @@ export const apiFactory = {
       'UX Designer',
       'Backend Developer',
       'Frontend Developer',
-      'Data Analyst',
+      'Data Analyst'
     ];
 
     return {
       name: names[Math.floor(Math.random() * names.length)],
-      job: jobs[Math.floor(Math.random() * jobs.length)],
+      job: jobs[Math.floor(Math.random() * jobs.length)]
     };
   },
 
@@ -44,7 +44,7 @@ export const apiFactory = {
       'tobias.funke@reqres.in',
       'byron.fields@reqres.in',
       'george.edwards@reqres.in',
-      'rachel.howell@reqres.in',
+      'rachel.howell@reqres.in'
     ];
     const passwords = [
       'password123',
@@ -52,12 +52,12 @@ export const apiFactory = {
       'qwertyuiop',
       'letmein123',
       'admin2024',
-      'welcome1',
+      'welcome1'
     ];
 
     return {
       email: emails[Math.floor(Math.random() * emails.length)],
-      password: passwords[Math.floor(Math.random() * passwords.length)],
+      password: passwords[Math.floor(Math.random() * passwords.length)]
     };
   },
 
@@ -67,7 +67,7 @@ export const apiFactory = {
     return {
       firstName: `FN_${randomStr}`,
       lastName: `LN_${randomStr}`,
-      id: `ID${Date.now().toString().slice(-4)}`,
+      id: `ID${Date.now().toString().slice(-4)}`
     };
-  },
+  }
 };

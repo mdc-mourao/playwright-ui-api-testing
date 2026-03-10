@@ -5,7 +5,7 @@ test.describe('@B2 @UI Test Automation - Employee Directory PIM', () => {
   test.beforeEach(async ({ page, baseURL, loginPage }) => {
     await page.goto(baseURL || '', {
       waitUntil: 'domcontentloaded',
-      timeout: 60000,
+      timeout: 60000
     });
     await loginPage.fillLoginCredencials();
     await loginPage.redirectToHomePage();
@@ -17,7 +17,7 @@ test.describe('@B2 @UI Test Automation - Employee Directory PIM', () => {
   });
 
   test('Navigate to PIM Module and search for an employee', async ({
-    pimPage,
+    pimPage
   }) => {
     await pimPage.redirectToPIMPage();
     await pimPage.verifyEmployeeListIsVisible();
