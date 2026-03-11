@@ -15,11 +15,12 @@ export class PimPage {
   readonly lastNameInput: Locator;
   readonly employeeId: Locator;
   readonly successToast: Locator;
+  readonly loading: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.pimMenu = page.locator('a[href*="viewPimModule"]');
-    this.title = page.locator('.oxd-topbar-header-title');
+    this.pimMenu = this.page.locator('a[href*="viewPimModule"]');
+    this.title = this.page.locator('.oxd-topbar-header-title');
     this.employeeListTable = this.page.locator('[role=table]');
     this.employeeRecord = this.page.locator('.oxd-table-card');
     this.nameCells = page.locator('.oxd-table-cell');
@@ -34,17 +35,22 @@ export class PimPage {
       .first();
     this.firstNameInput = this.page.locator('input[name="firstName"]');
     this.lastNameInput = this.page.locator('input[name="lastName"]');
-    this.employeeId = this.page.locator('.oxd-input');
+    this.employeeId = this.page.locator(
+      '.oxd-input-group:has-text("Employee Id") input'
+    );
     this.successToast = this.page.locator('.oxd-toast--success');
+    this.loading = this.page.locator('[class="oxd-loading-spinner"]').first();
   }
 
   async redirectToPIMPage() {
+    await this.loading.waitFor({ state: 'hidden' });
     await this.pimMenu.click();
     (await this.page.waitForURL('**/pim/viewEmployeeList'),
       await this.employeeRecord.first().waitFor({ state: 'visible' }));
   }
 
   async verifyEmployeeListIsVisible() {
+    await this.loading.waitFor({ state: 'hidden' });
     await expect(this.employeeListTable).toBeVisible();
     const count = await this.employeeRecord.count();
     expect(count).toBeGreaterThan(0);
@@ -94,6 +100,7 @@ export class PimPage {
   async addEmployee(firstName: string, lastName: string, id: string) {
     await this.addButton.click();
     await this.page.waitForURL('**/pim/addEmployee');
+    await this.loading.waitFor({ state: 'hidden' });
     await this.firstNameInput.fill(firstName);
     await this.lastNameInput.fill(lastName);
 
@@ -110,8 +117,9 @@ export class PimPage {
     lastName: string,
     id: string
   ) {
+    await this.loading.waitFor({ state: 'hidden' });
     await expect(this.firstNameInput).toHaveValue(firstName);
     await expect(this.lastNameInput).toHaveValue(lastName);
-    await expect(this.employeeId.nth(4)).toHaveValue(id);
+    await expect(this.employeeId).toHaveValue(id);
   }
 }

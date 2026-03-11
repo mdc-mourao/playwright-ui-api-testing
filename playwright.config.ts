@@ -33,14 +33,15 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: process.env.BASE_URL,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
     /* Record video only on failure. */
     video: 'on-first-retry',
     /* Capture screenshot on failure. */
     screenshot: 'only-on-failure',
     /* Set default timeouts for actions and navigation */
     actionTimeout: 15000,
-    navigationTimeout: 60000
+    navigationTimeout: 60000,
+    locale: 'en-GB'
   },
   expect: {
     /* Default timeout for all `expect()` assertions. */

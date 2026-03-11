@@ -3,7 +3,7 @@ import { test, expect } from '../fixtures/base';
 test.describe('@B3 @UI Test Automation - Dashboard Tests', () => {
   test.beforeEach(async ({ page, loginPage, baseURL }) => {
     await page.goto(baseURL || '', {
-      waitUntil: 'domcontentloaded',
+      waitUntil: 'commit',
       timeout: 60000
     });
     await loginPage.fillLoginCredencials();
