@@ -153,9 +153,15 @@ Instead of hardcoded values, our `validateUserData` builder implements:
 
 ### 4. CI/CD Pipeline
 
-Integrated with **GitHub Actions**, automatically running API tests and UI tests in Chromium on every `push` and `pull_request` for faster CI execution, with 2 workers. It securely handles environment variables using **GitHub Secrets**.
+Integrated with **GitHub Actions**, automatically running API tests and UI tests in Chromium on every `push` for faster CI execution, with 2 workers. It securely handles environment variables using **GitHub Secrets**.
 
 And also with manual control **Workflow Dispatch**. Features a parameterized manual trigger that allows to choose a specific Test Scopes (API only, UI only, or specific browsers like Firefox/WebKit).
+
+- 📊 Live Allure Report
+
+The latest automated test results are published using **Allure Report** and GitHub Pages:
+
+https://mdc-mourao.github.io/playwright-ui-api-testing/
 
 ### 🐳 5. Docker Image
 
@@ -217,7 +223,7 @@ Verify OrangeHRM demo site accessibility before running the tests
 Due to the unstable nature of the OrangeHRM demo environment, where global users frequently change the system language, this framework avoids assertions based on UI text strings (like menu names or titles). Instead, it prioritizes robust selectors (like ARIA roles, test IDs, or data attributes) and validates element visibility and URL states. This strategy prevents 'flaky tests' and false negatives caused by localization changes, ensuring the suite remains green regardless of the environment's current language setting.
 
 Occasionally, the site may become unavailable (HTTP 503/404) or extremely slow due to automated server resets or high concurrent traffic.
-To improve stability in the OrangeHRM demo environment, navigation uses: `waitUntil: "domcontentloaded"` and a 1 minute timeout (which did the trick :D).
+To improve stability in the OrangeHRM demo environment, navigation uses: `waitUntil: "commit"` and a 1 minute timeout (which did the trick :D).
 
 This strategy ensures that tests proceed once the HTML document has been fully parsed.
 Running all browsers in parallel may therefore lead to intermittent timeouts that are environment-related rather than test-related.

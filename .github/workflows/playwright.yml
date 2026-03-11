@@ -2,7 +2,7 @@ name: Playwright Tests
 
 on:
   push:
-    branches: [main, fix/ci-allure]
+    branches: [main]
 
   pull_request:
     branches: [main]
@@ -54,35 +54,45 @@ jobs:
 
       - name: Run API + Chromium (default) tests
         if: github.event_name != 'workflow_dispatch'
-        run: npx playwright test --project="API-Tests" --project="UI-Chromium" || true
+        run: npx playwright test --project="API-Tests" --project="UI-Chromium"
 
       - name: Run all tests
         if: github.event.inputs.test_type == 'all'
-        run: npx playwright test || true
+        run: npx playwright test
 
       - name: Run API
         if: github.event.inputs.test_type == 'api'
-        run: npx playwright test --project="API-Tests" || true
+        run: npx playwright test --project="API-Tests"
 
       - name: Run UI Chromium
         if: github.event.inputs.test_type == 'ui-chromium'
-        run: npx playwright test --project="UI-Chromium" || true
+        run: npx playwright test --project="UI-Chromium"
 
       - name: Run UI Firefox
         if: github.event.inputs.test_type == 'ui-firefox'
-        run: npx playwright test --project="UI-Firefox" || true
+        run: npx playwright test --project="UI-Firefox"
 
       - name: Run UI WebKit
         if: github.event.inputs.test_type == 'ui-webKit'
-        run: npx playwright test --project="UI-WebKit" || true
+        run: npx playwright test --project="UI-WebKit"
 
       - name: Run all UI browsers
         if: github.event.inputs.test_type == 'ui-all'
-        run: npx playwright test --project="UI-Chromium" --project="UI-Firefox" --project="UI-WebKit" || true
+        run: npx playwright test --project="UI-Chromium" --project="UI-Firefox" --project="UI-WebKit"
 
       - name: Generate Allure Report
         if: always()
-        run: npm run report:generate
+        run: |
+          npm install -g allure-commandline
+          npm run report:generate
+
+      - name: Deploy Allure Report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./allure-report
 
       - name: Upload Allure
         uses: actions/upload-artifact@v4
@@ -94,7 +104,7 @@ jobs:
 
       - name: Upload Playwright Trace/Videos (On Failure)
         uses: actions/upload-artifact@v4
-        if: always()
+        if: failure()
         with:
           name: playwright-traces
           path: test-results/
