@@ -4,14 +4,14 @@ test.describe('@B3 @UI Test Automation - Dashboard Tests', () => {
   test.beforeEach(async ({ page, loginPage, baseURL }) => {
     await page.goto(baseURL || '', {
       waitUntil: 'domcontentloaded',
-      timeout: 60000,
+      timeout: 60000
     });
     await loginPage.fillLoginCredencials();
     await loginPage.redirectToHomePage();
   });
 
   test('Verify that key dashboard elements/widgets are visible and rendered', async ({
-    dashboardPage,
+    dashboardPage
   }) => {
     await dashboardPage.validateDashboardTitle();
     const nrWidgetsResponse = await dashboardPage.waitForDashboardDataToLoad();
@@ -34,13 +34,13 @@ test.describe('@B3 @UI Test Automation - Dashboard Tests', () => {
     { name: 'My Info', path: '/pim/viewPersonalDetails' },
     {
       name: 'Performance',
-      path: '/performance/searchEvaluatePerformanceReview',
+      path: '/performance/searchEvaluatePerformanceReview'
     },
     { name: 'Dashboard', path: '/dashboard/index' },
     { name: 'Directory', path: '/directory/viewDirectory' },
     { name: 'Claim', path: '/claim/viewAssignClaim' },
     { name: 'Buzz', path: '/buzz/viewBuzz' },
-    { name: 'Maintenance', path: '/maintenance/purgeEmployee' },
+    { name: 'Maintenance', path: '/maintenance/purgeEmployee' }
   ];
   for (const item of menuItems) {
     test(`Click on ${item.name}`, async ({ page, dashboardPage }) => {

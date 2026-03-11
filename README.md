@@ -10,6 +10,7 @@ This project implements contract testing, dynamic business logic validation, and
 - Node.js
 - Git
 - Docker
+- Java (required for allure reports)
 
 ## Tech Stack
 
@@ -98,7 +99,7 @@ Or by section (A or B) where `_` is the number of the section [1, 2, 3], e.g:
 npx playwright test --grep='A3'
 ```
 
-## How to generate test report
+## 📂 How to generate test report
 
 Playwright **HTML Default**:
 
@@ -108,8 +109,17 @@ npx playwright show-report
 
 Generate and open the **Allure** report
 
+- If you have JAVA configurated in your PATH
+
 ```
 npx allure open allure-report
+```
+
+- Or, you can use a HTTP server
+
+```
+npx http-server allure-report
+http://127.0.0.1:8080
 ```
 
 ## Technical Highlights
@@ -132,22 +142,22 @@ Instead of hardcoded values, our `validateUserData` builder implements:
 
 Integrated with **GitHub Actions**, automatically running API tests and UI tests in Chromium on every `push` and `pull_request` for faster CI execution, with 2 workers. It securely handles environment variables using **GitHub Secrets**.
 
-And also with manual control **Workflow Dispatch**. Features a parameterized manual trigger that allows to choose a specific Test Scopes (API only, UI only, or specific browsers like Firefox/Webkit).
+And also with manual control **Workflow Dispatch**. Features a parameterized manual trigger that allows to choose a specific Test Scopes (API only, UI only, or specific browsers like Firefox/WebKit).
 
 ### 🐳 4. Docker Image
 
-Docker is configured to run only API tests and UI using Chromium only (`docker-compose up`) but can be changed with the following commands in the terminal:
+Docker is configured to run API tests, UI using Chromium only and automatically generate the Allure Report in the container(`docker-compose up --build`) but can be changed with the following commands in the terminal:
 
 1.  Run all tests and Generate a report (API and UI cross-browsing):
 
 ```
-docker compose run --rm playwright sh -c "npm ci && npm run test:all"
+docker compose run --rm playwright sh -c "npm run test:api || true && npm run report:generate"
 ```
 
 2.  Run a specific set of tests (e.g. test:api, test:ui and test:chromium - package.json > scripts):
 
 ```
-docker compose run --rm playwright sh -c "npm ci && npm run test:chromium"
+docker compose run --rm playwright sh -c "npm run test:chromium || true && npm run report:generate"
 ```
 
 Once the tests finish, the results are synced to the **allure-results** folder on your machine, just run the command to generate it.

@@ -6,19 +6,19 @@ import globals from 'globals';
 export default [
   js.configs.recommended,
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.ts'],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig.json'
       },
       globals: {
         ...globals.node,
-        ...globals.browser,
-      },
+        ...globals.browser
+      }
     },
     plugins: {
-      '@typescript-eslint': tseslint,
+      '@typescript-eslint': tseslint
     },
     rules: {
       ...tseslint.configs.recommended.rules,
@@ -26,8 +26,8 @@ export default [
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       'no-empty-pattern': 'off',
-      '@typescript-eslint/no-unused-expressions': 'off',
-    },
+      '@typescript-eslint/no-unused-expressions': 'off'
+    }
   },
   {
     ignores: [
@@ -37,6 +37,13 @@ export default [
       '**/allure-results/**',
       '**/allure-report/**',
       '**/test-results/**',
-    ],
-  },
+      '.husky',
+      'package-lock.json',
+      'LICENSE',
+      '.env*',
+      '**/*.png',
+      '**/*.jpg',
+      '**/*.jpeg'
+    ]
+  }
 ];

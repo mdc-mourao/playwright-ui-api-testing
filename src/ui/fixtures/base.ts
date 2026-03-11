@@ -20,7 +20,7 @@ export const test = base.extend<MyFixtures>({
 
   dashboardPage: async ({ page }, use) => {
     await use(new DashboardPage(page));
-  },
+  }
 });
 
 export { expect } from '@playwright/test';

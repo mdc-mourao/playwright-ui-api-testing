@@ -92,7 +92,7 @@ export class DashboardPage {
       ),
       this.page.waitForResponse(
         (resp) => resp.url().includes('/locations') && resp.status() === 200
-      ),
+      )
     ]);
 
     const body = await response.json();
@@ -128,7 +128,7 @@ export class DashboardPage {
 
   async navigateToMenuItem(menuName: string) {
     const menuLink = this.page.locator('.oxd-main-menu-item', {
-      hasText: menuName,
+      hasText: menuName
     });
     await menuLink.click();
   }

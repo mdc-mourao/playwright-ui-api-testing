@@ -5,7 +5,7 @@ export const userListSchema = {
   per_page: expect.any(Number),
   total: expect.any(Number),
   total_pages: expect.any(Number),
-  data: expect.any(Array),
+  data: expect.any(Array)
 };
 
 export const validateUserData = (user: any) => {
@@ -21,7 +21,7 @@ export const validateUserData = (user: any) => {
     first_name: expect.any(String),
     last_name: expect.any(String),
     email: expect.stringMatching(emailRegex),
-    avatar: expectedAvatar,
+    avatar: expectedAvatar
   };
 };
 
@@ -31,7 +31,7 @@ export const userCreateSchema = {
   id: expect.stringMatching(/^\d+$/),
   createdAt: expect.stringMatching(
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
-  ),
+  )
 };
 
 export const userUpdateSchema = {
@@ -39,5 +39,5 @@ export const userUpdateSchema = {
   job: expect.any(String),
   updatedAt: expect.stringMatching(
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
-  ),
+  )
 };
