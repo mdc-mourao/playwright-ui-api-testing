@@ -11,4 +11,4 @@ services:
     env_file:
       - .env
     command: >
-      sh -c "npm ci && npx playwright test --project='API-Tests' && npm run report:generate"
+      sh -c "npx playwright test --project='API-Tests' --project='UI-Chromium' && npm run report:generate"

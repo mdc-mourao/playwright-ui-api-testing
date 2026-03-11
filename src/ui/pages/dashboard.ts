@@ -12,53 +12,57 @@ export class DashboardPage {
   readonly leavesWidget: Locator;
   readonly subunitWidget: Locator;
   readonly locationsWidget: Locator;
+  readonly maintenanceMessage: Locator;
 
   readonly sidebarMenuItems: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.widgets = page.locator(
+    this.widgets = this.page.locator(
       '.oxd-grid-item.oxd-grid-item--gutters.orangehrm-dashboard-widget'
     );
-    this.dashboardTitle = page.locator('.oxd-topbar-header-title');
+    this.dashboardTitle = this.page.locator('.oxd-topbar-header-title');
 
-    this.timeAtWorkWidget = page
+    this.timeAtWorkWidget = this.page
       .locator(
         '.oxd-grid-item.oxd-grid-item--gutters.orangehrm-dashboard-widget'
       )
       .nth(0);
-    this.myActionsWidget = page
+    this.myActionsWidget = this.page
       .locator(
         '.oxd-grid-item.oxd-grid-item--gutters.orangehrm-dashboard-widget'
       )
       .nth(1);
-    this.shortcutsWidget = page
+    this.shortcutsWidget = this.page
       .locator(
         '.oxd-grid-item.oxd-grid-item--gutters.orangehrm-dashboard-widget'
       )
       .nth(2);
-    this.feedWidget = page
+    this.feedWidget = this.page
       .locator(
         '.oxd-grid-item.oxd-grid-item--gutters.orangehrm-dashboard-widget'
       )
       .nth(3);
-    this.leavesWidget = page
+    this.leavesWidget = this.page
       .locator(
         '.oxd-grid-item.oxd-grid-item--gutters.orangehrm-dashboard-widget'
       )
       .nth(4);
-    this.subunitWidget = page
+    this.subunitWidget = this.page
       .locator(
         '.oxd-grid-item.oxd-grid-item--gutters.orangehrm-dashboard-widget'
       )
       .nth(5);
-    this.locationsWidget = page
+    this.locationsWidget = this.page
       .locator(
         '.oxd-grid-item.oxd-grid-item--gutters.orangehrm-dashboard-widget'
       )
       .nth(6);
 
-    this.sidebarMenuItems = page.locator('.oxd-main-menu-item');
+    this.maintenanceMessage = this.page.locator(
+      '[class="oxd-text oxd-text--toast-message"]'
+    );
+    this.sidebarMenuItems = this.page.locator('.oxd-main-menu-item');
   }
 
   async validateDashboardTitle() {
@@ -131,5 +135,10 @@ export class DashboardPage {
       hasText: menuName
     });
     await menuLink.click();
+    menuName !== 'Maintenance'
+      ? await this.dashboardTitle.waitFor({ state: 'visible', timeout: 20000 })
+      : await expect(this.maintenanceMessage).toContainText(
+          'You have requested to access a critical Administrator function in OrangeHRM and are required to validate your credentials below'
+        );
   }
 }

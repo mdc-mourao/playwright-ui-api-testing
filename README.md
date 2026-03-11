@@ -37,9 +37,12 @@ This project implements contract testing, dynamic business logic validation, and
     npm install
     npx playwright install --with-deps
 
-### Optional
+### Visual Studio Code
 
-    Install Visual Studio Code and install the extension "Playwright"
+    Install Visual Studio Code and install these extension:
+    - Playwright
+    - ESLint
+    - Prettier - Code Formatter
 
 ## Environment Configurations
 
@@ -69,7 +72,7 @@ src/
 1. **Hybrid Testing Approach (API + UI)**: API tests provide fast feedback on core business logic and UI tests ensure end-to-end user journey integrity.
 2. **POM & Fixtures**: Implementation of POM for Login, Dashboard, and PIM pages with fixtures.
 3. **Resilience to Environment Instability**: No hardcoded sleeps, just explict waits.
-4. **Containerization with Docker**: to help with different environment, such us locally and CI (GitHub Actions)
+4. **Containerization with Docker**: To help with different environment, such us locally and CI (GitHub Actions)
 5. **Visual Regression Strategy**: Full-page screenshots would cause false negatives because of the dynamic changes. Selective screenshotting provides visual security.
 
 ## How to run the tests
@@ -124,34 +127,44 @@ http://127.0.0.1:8080
 
 ## Technical Highlights
 
-### 1. Advanced Schema Validation (AJV)
+### 1. Configurations
+
+Playwright Configuration - **playwright.config.ts**
+
+- Parallel Execution: 4 workers for optimal performance
+- Multiple Browser Support: Chrome and Firefox configurations
+- Screenshots & Videos: Automatic capture on failure
+- Trace Collection: Detailed debugging information
+- Retry Logic: Retry configuration for flaky-prone scenarios
+
+### 2. Advanced Schema Validation (AJV)
 
 We use **AJV (JSON Schema Validator)** to enforce API contracts.
 
 - Strict type checking (e.g., IDs must be `numbers`, emails must be `strings`).
 - Prevention of unexpected fields using `additionalProperties: false`.
 
-### 2. Dynamic Business Logic Oracle
+### 3. Dynamic Business Logic Oracle
 
 Instead of hardcoded values, our `validateUserData` builder implements:
 
 - **Email Masking:** Validates if the email follows the `firstname.lastname@reqres.in` pattern via RegEx.
 - **Avatar Matching:** Ensures the avatar URL contains the correct User ID.
 
-### 3. CI/CD Pipeline
+### 4. CI/CD Pipeline
 
 Integrated with **GitHub Actions**, automatically running API tests and UI tests in Chromium on every `push` and `pull_request` for faster CI execution, with 2 workers. It securely handles environment variables using **GitHub Secrets**.
 
 And also with manual control **Workflow Dispatch**. Features a parameterized manual trigger that allows to choose a specific Test Scopes (API only, UI only, or specific browsers like Firefox/WebKit).
 
-### 🐳 4. Docker Image
+### 🐳 5. Docker Image
 
 Docker is configured to run API tests, UI using Chromium only and automatically generate the Allure Report in the container(`docker-compose up --build`) but can be changed with the following commands in the terminal:
 
 1.  Run all tests and Generate a report (API and UI cross-browsing):
 
 ```
-docker compose run --rm playwright sh -c "npm run test:api || true && npm run report:generate"
+docker compose run --rm playwright sh -c "npm run test:all || true && npm run report:generate"
 ```
 
 2.  Run a specific set of tests (e.g. test:api, test:ui and test:chromium - package.json > scripts):
@@ -162,7 +175,7 @@ docker compose run --rm playwright sh -c "npm run test:chromium || true && npm r
 
 Once the tests finish, the results are synced to the **allure-results** folder on your machine, just run the command to generate it.
 
-### 5. Linting and Formatting
+### 6. Linting and Formatting
 
 This project uses **ESLint** for code quality analysis and **Prettier** for automatic code formatting. These tools ensure code consistency, identify bad practices, and maintain a uniform code style across the project.
 
@@ -176,7 +189,6 @@ This project uses **ESLint** for code quality analysis and **Prettier** for auto
 
 - `npm run lint` — Scans the entire codebase for code quality issues and displays them without modifying files.
 - `npm run lint:fix` — Automatically fixes ESLint issues and formats all files with Prettier (spaces, quotes, indentation, etc.).
-- `npm run lint:report` — Generates an HTML report of linting issues saved as `lint-report.html`.
 - `npm run format` — Formats code with Prettier only (without ESLint analysis).
 
 #### Configuration:
@@ -199,6 +211,8 @@ This project uses **ESLint** for code quality analysis and **Prettier** for auto
 Due to the nature of the public demonstration instance used for UI testing, the following external behaviors have been identified:
 
 #### Server Instability
+
+Verify OrangeHRM demo site accessibility before running the tests
 
 Due to the unstable nature of the OrangeHRM demo environment, where global users frequently change the system language, this framework avoids assertions based on UI text strings (like menu names or titles). Instead, it prioritizes robust selectors (like ARIA roles, test IDs, or data attributes) and validates element visibility and URL states. This strategy prevents 'flaky tests' and false negatives caused by localization changes, ensuring the suite remains green regardless of the environment's current language setting.
 

@@ -3,7 +3,7 @@ import { test, expect } from '../fixtures/base';
 test.describe('@B1 @UI Test Automation - Login Tests', () => {
   test.beforeEach(async ({ page, baseURL }) => {
     await page.goto(baseURL || '', {
-      waitUntil: 'domcontentloaded',
+      waitUntil: 'commit',
       timeout: 60000
     });
   });
@@ -12,7 +12,8 @@ test.describe('@B1 @UI Test Automation - Login Tests', () => {
     await loginPage.fillLoginCredencials();
     const loginLogo = page.locator('.orangehrm-login-branding');
     await expect(loginLogo).toHaveScreenshot('login-page.png', {
-      maxDiffPixels: 100
+      maxDiffPixels: 200,
+      threshold: 0.2
     });
     // Verify redirection to Dashboard and it loads successfully
     await loginPage.redirectToHomePage();

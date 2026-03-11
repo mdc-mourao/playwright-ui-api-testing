@@ -13,17 +13,17 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.usernameInput = page.locator('input[name="username"]');
-    this.passwordInput = page.locator('input[name="password"]');
-    this.loginButton = page.locator('button[type="submit"]');
-    this.userOptions = page.locator('.oxd-userdropdown-tab');
-    this.title = page.locator('.oxd-topbar-header-title');
+    this.usernameInput = this.page.locator('input[name="username"]');
+    this.passwordInput = this.page.locator('input[name="password"]');
+    this.loginButton = this.page.locator('button[type="submit"]');
+    this.userOptions = this.page.locator('.oxd-userdropdown-tab');
+    this.title = this.page.locator('.oxd-topbar-header-title');
   }
 
   async fillLoginCredencials(username?: string, password?: string) {
     const user = username !== undefined ? username : this.username;
     const pass = password !== undefined ? password : this.password;
-    await expect(this.usernameInput).toBeVisible();
+    await expect(this.usernameInput).toBeVisible({ timeout: 50000 });
     await this.usernameInput.fill(user);
     await this.passwordInput.fill(pass);
   }

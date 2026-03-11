@@ -52,17 +52,17 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run API
+      - name: Run API + Chromium (default) tests
         if: github.event_name != 'workflow_dispatch'
-        run: npx playwright test --project="API-Tests" || true
+        run: npx playwright test --project="API-Tests" --project="UI-Chromium" || true
 
       - name: Run all tests
         if: github.event.inputs.test_type == 'all'
         run: npx playwright test || true
 
-      - name: Run API + Chromium (default) tests
-        if: github.event.inputs.test_type == 'default'
-        run: npx playwright test --project="API-Tests" --project="UI-Chromium" || true
+      - name: Run API
+        if: github.event.inputs.test_type == 'api'
+        run: npx playwright test --project="API-Tests" || true
 
       - name: Run UI Chromium
         if: github.event.inputs.test_type == 'ui-chromium'

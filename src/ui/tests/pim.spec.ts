@@ -4,7 +4,7 @@ import { apiFactory } from '../../utils/apiFactory';
 test.describe('@B2 @UI Test Automation - Employee Directory PIM', () => {
   test.beforeEach(async ({ page, baseURL, loginPage }) => {
     await page.goto(baseURL || '', {
-      waitUntil: 'domcontentloaded',
+      waitUntil: 'commit',
       timeout: 60000
     });
     await loginPage.fillLoginCredencials();
