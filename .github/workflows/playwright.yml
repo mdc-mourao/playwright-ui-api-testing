@@ -24,6 +24,9 @@ on:
 
 jobs:
   testing:
+    permissions:
+      contents: write
+      pages: write
     timeout-minutes: 100
     runs-on: ubuntu-latest
     env:
@@ -92,7 +95,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./allure-report
+          publish_dir: allure-report
 
       - name: Upload Allure
         uses: actions/upload-artifact@v4
