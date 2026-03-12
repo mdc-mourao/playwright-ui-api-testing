@@ -12,9 +12,10 @@ on:
       test_type:
         description: 'What to execute?'
         required: true
-        default: 'all'
+        default: api-chromium
         type: choice
         options:
+          - api-chromium
           - all
           - ui-all
           - ui-chromium
@@ -57,6 +58,10 @@ jobs:
 
       - name: Run API + Chromium (default) tests
         if: github.event_name != 'workflow_dispatch'
+        run: npx playwright test --project="API-Tests" --project="UI-Chromium"
+
+      - name: Run API + Chromium (default)
+        if: github.event.inputs.test_type == 'api-chromium'
         run: npx playwright test --project="API-Tests" --project="UI-Chromium"
 
       - name: Run all tests
